@@ -1,0 +1,16 @@
+*.ipynb_checkpoints
+
+#
+*.png
+*README
+
+#data
+*.tar.gz
+*.zip
+*.csv
+*.dat
+*.eps
+*.lst
+
+#code
+*.pl
