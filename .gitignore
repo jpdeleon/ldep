@@ -1,12 +1,19 @@
+#miscellaneous
 *.ipynb_checkpoints
 *.objects
 
-#
+#folder
+figs/
+
+#figures
 *.png
 *README
 
 #data
 *.tar.gz
+*.npy.gz
+*.npy
+*.gz
 *.zip
 *.csv
 *.dat
