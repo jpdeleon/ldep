@@ -280,7 +280,7 @@ def logprior(theta,up=None):
         a   < 0 or a  > 100 or \
         tc < t[0] or tc > t[-1]:
             
-        print('off limits encountered in logprior')
+        #print('off limits encountered in logprior')
         return -np.inf
 
     lp = 0
@@ -325,7 +325,7 @@ def logprob(theta_sys,ts,fluxes,p,airmasses,dxs,dys,up=None):
         lp += logprior(theta3)
     
     if np.isnan(ll).any():
-        print('NaN encountered in loglike')
+        #print('NaN encountered in loglike')
         return -np.inf
     
     #total: sum of prior and likelihood

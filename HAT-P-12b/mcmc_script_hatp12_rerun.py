@@ -1,16 +1,11 @@
 #!home/usr/miniconda3/envs/astroconda3/python #laptop
 #!home/usr/miniconda2/envs/astroconda/python #Tamura server
 '''
-0. tmux new -s corot5b
+0. tmux new -s hatp12b
 1. source activate astroconda/3
-2. python mcmc_sript_hatp12.py
+2. python mcmc_sript_hatp12_rerun.py
 
-Note: after first stage, a trace is set
->> pdb.set_trace()
-
-so that `burn` will be set to correct number. Then,
->> c
-to continue.
+Uses theta_post.csv as initial values for mcmc run.
 '''
 import os
 import sys
@@ -38,7 +33,7 @@ fontsize=18
 pl.rcParams['ytick.labelsize'] = 'large'
 pl.rcParams['xtick.labelsize'] = 'large'
 
-environ = 'astroconda'
+environ = 'astroconda35'
 if os.environ['CONDA_DEFAULT_ENV'] == environ:
     pass
 else:
@@ -59,15 +54,14 @@ for i,(f,b) in enumerate(zip(file_list,bands)):
     df = df.set_index('GJD')
     data[b]=df
 
-
-
-_P   = 4.301219
-_t14 = 0.1302
-_b   = 0.172
-_a_s = 11.52
-_k   = np.sqrt(0.01804)
-_inc = np.deg2rad(89.10)
-tc_0  = 2.4578e6+0.22
+_P   = 3.2130598
+#_tc  = 245778e6+8.01
+_t14 = 0.09740
+_b   = 0.211
+_a_s = 11.80
+_k   = np.sqrt(0.01977)
+_inc = np.deg2rad(89.00)
+tc_0  = 2.457873e6+0.23
 q1_0, q2_0 = 0.4, 0.4
 
 def scaled_a(p, t14, k, i=np.pi/2, impact_param=0):
@@ -160,7 +154,7 @@ for i,b in enumerate(sorted(bands)):
     dxs.append(d['dx'].values)
     dys.append(d['dy'].values)
     
-axs.set_title('HAT-P-44b raw light curve',fontsize=fontsize)
+axs.set_title('WASP-21 b raw light curve',fontsize=fontsize)
 axs.set_ylabel('Relative Flux + Offset',fontsize=fontsize)
 axs.set_xlabel('Phase (days)',fontsize=fontsize)
 
@@ -256,8 +250,7 @@ for n,b in enumerate(sorted(bands)):
 #-------------Limb-darkening priors---------------#
 print('---sampling limb dark priors---')
 
-teff, uteff, logg, ulogg, feh, ufeh=5300,100, 4.460,0.06, 0.33,0.1
-
+teff, uteff, logg, ulogg, feh, ufeh=4650,60, 4.610,0.01, -0.290,0.05
 #limbdark priors
 ldp = []
 for i in 'g*,r*,z*'.split(','):
@@ -388,14 +381,17 @@ sampler = EnsembleSampler(nwalkers, ndim, logprob, args=args, threads=1)
 
 #random initial condition
 #pos0 = sample_ball(theta_sys, [1e-4]*ndim, nwalkers)
-pos0 = [np.array(theta_sys) + 1e-8 * np.random.randn(ndim) for i in range(nwalkers)]
+
+#load aposteriori values from previous mcmc runs
+theta_sys0 = np.load('theta_post.csv')
+pos0 = [np.array(theta_sys0) + 1e-8 * np.random.randn(ndim) for i in range(nwalkers)]
 
 #begin mcmc: 1st stage
 for pos,lnp,rstate in tqdm(sampler.sample(pos0, iterations=nsteps1)):
     pass
 
 #visualize 1st stage
-param_names='k1,k2,k3,tc,a1,a2,a3,inc,q11,q12,q13,q21,q22,u23,ls1,ls2,ls3,k01,k02,k03,k11,k12,k13,k21,k22,k23,k31,k32,k33,k41,k42,k43'.split(',')
+param_names='k1,k2,k3,tc,a1,a2,a3,inc,u11,u12,u13,u21,u22,u23,ls1,ls2,ls3,k01,k02,k03,k11,k12,k13,k21,k22,k23,k31,k32,k33,k41,k42,k43'.split(',')
 
 chain=sampler.chain
 nwalkers, nsteps, ndim = chain.shape
@@ -407,9 +403,6 @@ fig, axs = pl.subplots(ndim, 1, figsize=(15,ndim/1.5), sharex=True)
 [axs.flat[i].set_ylabel(l) for i,l in enumerate(param_names)]  
 pl.xlabel('nsteps')
 pl.savefig('chain1.png')
-
-#send chain.png from server to local
-#os.system("scp Jerome@esptodai.astron.s.u-tokyo.ac.jp:/home/Jerome/github/muscat/HAT-P-12b/*.png .")
 
 #check and discard burn-in stage
 #import pdb
@@ -424,7 +417,7 @@ with gzip.GzipFile(os.path.join(loc,'chain1.npy.gz'), "w") as g1:
     np.save(g1, chain)
 
 with gzip.GzipFile(os.path.join(loc,'lnp1.npy.gz'), "w") as g2:
-    np.save(g2, sampler.flatlnprobability)
+    np.save(g2, chain)
 #np.allclose(sample_chain.shape,chain.shape)
 
 
@@ -442,7 +435,7 @@ with gzip.GzipFile(os.path.join(loc,'chain2.npy.gz'), "w") as g1:
     np.save(g1, chain)
 
 with gzip.GzipFile(os.path.join(loc,'lnp2.npy.gz'), "w") as g2:
-    np.save(g2, sampler.flatlnprobability)
+    np.save(g2, lnp2)
 #np.allclose(sample_chain.shape,chain.shape)
 
 #visualize 2nd stage
@@ -455,3 +448,4 @@ fig, axs = pl.subplots(ndim, 1, figsize=(15,ndim/1.5), sharex=True)
 [axs.flat[i].set_ylabel(l) for i,l in enumerate(param_names)]  
 pl.xlabel('nsteps')
 pl.savefig('chain2.png')
+

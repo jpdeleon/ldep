@@ -1,9 +1,9 @@
 #!home/usr/miniconda3/envs/astroconda3/python #laptop
 #!home/usr/miniconda2/envs/astroconda/python #Tamura server
 '''
-0. tmux new -s corot5b
+0. tmux new -s hatp44b
 1. source activate astroconda/3
-2. python mcmc_sript_hatp12.py
+2. python mcmc_sript_hatp44.py
 
 Note: 
 This uses the result of previous mcmc 
@@ -408,7 +408,7 @@ sampler = EnsembleSampler(nwalkers, ndim, logprob, args=args, threads=1)
 #random initial condition
 #pos0 = sample_ball(theta_sys, [1e-4]*ndim, nwalkers)
 
-#load result of previous mcmc run
+#load result of previous mcmc runs
 theta_sys0 = np.load('theta_post.csv')
 pos0 = [np.array(theta_sys0) + 1e-8 * np.random.randn(ndim) for i in range(nwalkers)]
 
