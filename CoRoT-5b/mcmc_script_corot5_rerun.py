@@ -38,7 +38,7 @@ fontsize=18
 pl.rcParams['ytick.labelsize'] = 'large'
 pl.rcParams['xtick.labelsize'] = 'large'
 
-environ = 'astroconda35'
+environ = 'astroconda'
 if os.environ['CONDA_DEFAULT_ENV'] == environ:
     pass
 else:
@@ -391,7 +391,7 @@ sampler = EnsembleSampler(nwalkers, ndim, logprob, args=args, threads=1)
 #pos0 = sample_ball(theta_sys, [1e-4]*ndim, nwalkers)
 
 #load results of previous mcmc runs
-theta_sys0 = np.load('theta_post.csv')
+theta_sys0 = np.load('theta_post.csv.npy')
 pos0 = [np.array(theta_sys0) + 1e-8 * np.random.randn(ndim) for i in range(nwalkers)]
 
 #begin mcmc: 1st stage
@@ -399,7 +399,7 @@ for pos,lnp,rstate in tqdm(sampler.sample(pos0, iterations=nsteps1)):
     pass
 
 #visualize 1st stage
-param_names='k1,k2,k3,tc,a1,a2,a3,inc,u11,u12,u13,u21,u22,u23,ls1,ls2,ls3,k01,k02,k03,k11,k12,k13,k21,k22,k23,k31,k32,k33,k41,k42,k43'.split(',')
+param_names='k1,k2,k3,tc,a1,a2,a3,b,q11,q12,q13,q21,q22,q23,ls1,ls2,ls3,k01,k02,k03,k11,k12,k13,k21,k22,k23,k31,k32,k33,k41,k42,k43'.split(',')
 
 chain=sampler.chain
 nwalkers, nsteps, ndim = chain.shape
@@ -425,7 +425,7 @@ with gzip.GzipFile(os.path.join(loc,'chain1.npy.gz'), "w") as g1:
     np.save(g1, chain)
 
 with gzip.GzipFile(os.path.join(loc,'lnp1.npy.gz'), "w") as g2:
-    np.save(g2, chain)
+    np.save(g2, sampler.flatlnprobability)
 #np.allclose(sample_chain.shape,chain.shape)
 
 
@@ -439,15 +439,11 @@ for pos2,lnp2,rstate in tqdm(sampler.sample(pos, iterations=nsteps2)):
 #save chain
 chain=sampler.chain
 loc='.'
-fname='chain2.npy.gz'
-with gzip.GzipFile(os.path.join(loc,fname), "w") as g1:
+with gzip.GzipFile(os.path.join(loc,'chain2.npy.gz'), "w") as g1:
     np.save(g1, chain)
 
-
-os.system(transfer_data)
-
 with gzip.GzipFile(os.path.join(loc,'lnp2.npy.gz'), "w") as g2:
-    np.save(g2, lnp2)
+    np.save(g2, sampler.flatlnprobability)
 #np.allclose(sample_chain.shape,chain.shape)
 
 #visualize 2nd stage

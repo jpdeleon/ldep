@@ -1,5 +1,5 @@
 #miscellaneous
-*.ipynb_checkpoints
+.ipynb_checkpoints
 *.objects
 
 #folder
@@ -7,7 +7,8 @@ figs/
 
 #figures
 *.png
-*README
+*.jpg
+README
 
 #data
 *.tar.gz
@@ -22,3 +23,7 @@ figs/
 
 #code
 *.pl
+*.cpp
+
+#serparate repo: peach
+tutorial/

@@ -1,0 +1,19 @@
+INFO:root:---Limb darkening prior---
+INFO:root:g*:	u1=0.50+-0.01,u2=0.25+-0.01
+INFO:root:r*:	u1=0.33+-0.01,u2=0.31+-0.01
+INFO:root:z*:	u1=0.29+-0.03,u2=0.21+-0.03
+INFO:root:---Average planetary radius---
+INFO:root:published value = 1.39+/-0.05
+computed 	= 1.3539903806707774
+difference	= 0.03+/-0.05
+INFO:root:---Limb darkening prior---
+INFO:root:g*:	u1=0.50+-0.01,u2=0.25+-0.01
+INFO:root:r*:	u1=0.33+-0.01,u2=0.31+-0.01
+INFO:root:z*:	u1=0.29+-0.03,u2=0.21+-0.03
+INFO:root:g:	rms=0.21483894775121182
+INFO:root:r:	rms=0.1774802145992067
+INFO:root:z:	rms=0.29552888984141923
+INFO:root:---Average planetary radius---
+INFO:root:published value = 1.39+/-0.05
+computed 	= 1.3539903806707774
+difference	= 0.03+/-0.05

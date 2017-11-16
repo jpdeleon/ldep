@@ -1,0 +1,76 @@
+andrew wolfgang
+MR-relation
+
+KESPRINT
+0. install 
+1. get masses
+2. compute expected semi-amplitudes
+geometric mean of error
+
+interesting properties:
+
+host star brighter than Vmag
+
+
+getting densities
+get equilibrium
+
+
+++++++++++method 1:
+model each band separately
+but single prior on rho_star 
+(but will propagate on k and other params)
+
+rho_star(P,k,b,etc) check Seager+2001
+
+log_g, R* convert to stellar density
+monte carlo simulation of error bars
+
+check for convergence using Gelmann-Rubin statistic or acorr
+
+++++++++++method 2:
+simultaneous multi-band
+
+>>take the MAP of sys and correct lc
+>>fix sys coeffs for method 2 while transit params are shared
+>>check uncertainties of transit params from results
+of method 1 are 1-sigma with that of method2
+
+
+check for convergence using Gelmann-Rubin statistic or acorr
+
+DFM
+try acorr
+
+
+++++++++++++++++++++++++=
+mersenne twister
+gnu
+
+categorize
+low temperature and high temperature planet
+
+
+* aim catalog of low density 
+
+1. calculate theoretical rayleigh slope
+2. consistent (<1 sigma) from theoretical rayleigh slope
+3. 
+
+* search for some rules correlation, temperature, etc. 
+* given MuSCAT2: hundred nights
+* 
+
+filter/ scan 
+
+
+
+K2-105 (discard data)
+see airmass > 2
+
+Pont+06
+Winn+08
+
+
+calculate red noise
+
